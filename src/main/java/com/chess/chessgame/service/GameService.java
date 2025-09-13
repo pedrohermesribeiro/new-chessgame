@@ -2232,7 +2232,7 @@ public class GameService {
             return gameRepository.save(updatedGame);
         }
         
-        String knightDefense = makeMoveBlackPiecesKnight();
+        String knightDefense = makeMoveBlackPiecesKnight(gameId);
         System.err.println("Defesa simples selecionada por movimentação do cavalo: " + knightDefense + " Estagio 05");
         if(knightDefense != null && !inCheck) {
         	
@@ -2864,7 +2864,7 @@ public class GameService {
      }
     
     //Movimentos simples de peças ativas ativas
-    private String makeMoveBlackPiecesKnight(){
+    private String makeMoveBlackPiecesKnight(Long gameId){
         List<MovePiece> blackPieces = makeListBlackPieces();
         List<MovePiece> positionAttack = null;
         String movPieceFirst = null;
@@ -2895,6 +2895,12 @@ public class GameService {
         }
 
         System.err.println(" Próxima jogada total opções " + blackPieces.size() + " estagio 02 ");
+        if(!movPiece.isEmpty() && movPieceFirst != null ) {
+    		boolean counterAttack = isNextMoveCounterAttack(gameId, movPieceFirst, movPiece.getFirst());
+            if(counterAttack) {
+            	movPieceFirst = null;
+        	}
+        }
         return movPieceFirst;
      }
        
